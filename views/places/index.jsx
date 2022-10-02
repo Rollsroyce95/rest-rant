@@ -1,24 +1,31 @@
-// Modules and Globals
-require('dotenv').config()
-const express = require('express')
-const app = express()
+const React = require('react')
+const Def = require('../default')
 
-// Express Settings
-app.set('views', __dirname + '/views')
-app.set('view engine', 'jsx')
-app.engine('jsx', require('express-react-views').createEngine())
-app.use(express.static('public'))
+function index (data) {
+	let placesFormatted = data.places.map((place, index) => {
+		return (
+		  <div className="col-sm-6">
+		    <h2>{place.name}</h2>
+		    <p className="text-center">
+		      {place.cuisines}
+		    </p>
+		    <img src={place.pic} alt={place.name} />
+		    <p className="text-center">
+		      Located in {place.city}, {place.state}
+		    </p>
+		  </div>
+		)
+	    })
+	return (
+	  <Def>
+	      <main>
+		        <h1>Places to Rant or Rave About</h1>
+		        <div className="row">
+		        {placesFormatted}
+		        </div>
+	      </main>
+	  </Def>
+	)
+      }
 
-// Controllers & Routes
-app.use('/places', require('./controllers/places'))
-
-app.get('/', (req, res) => {
-    res.render('home')
-})
-
-app.get('*', (req, res) => {
-    res.render('error404')
-})
-
-// Listen for Connections
-app.listen(process.env.PORT)
+module.exports = index
